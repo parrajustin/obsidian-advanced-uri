@@ -1,6 +1,6 @@
 import { SuggestModal } from "obsidian";
-import AdvancedURI from "../main";
-import { SearchModalData } from "../types";
+import type AdvancedURI from "../main";
+import type { SearchModalData } from "../types";
 
 export class SearchModal extends SuggestModal<SearchModalData> {
     plugin: AdvancedURI;
@@ -15,21 +15,23 @@ export class SearchModal extends SuggestModal<SearchModalData> {
         if (query === "") {
             query = "...";
         }
-        let regex: RegExp;
+        let regex: RegExp | undefined;
         try {
             regex = new RegExp(query);
-        } catch (error) {}
+        } catch (error) {
+            console.error(`failed to compile ${query}`, error);
+        }
         return [
             {
                 source: query,
                 isRegEx: false,
-                display: query,
+                display: query
             },
             {
                 source: query,
                 display: regex ? `As RegEx: ${query}` : `Can't parse RegEx`,
-                isRegEx: true,
-            },
+                isRegEx: true
+            }
         ];
     }
 
@@ -37,8 +39,5 @@ export class SearchModal extends SuggestModal<SearchModalData> {
         el.innerText = value.display;
     }
 
-    onChooseSuggestion(
-        item: SearchModalData,
-        _: MouseEvent | KeyboardEvent
-    ): void {}
+    onChooseSuggestion(_Data: SearchModalData, _Mouse: MouseEvent | KeyboardEvent): void {}
 }

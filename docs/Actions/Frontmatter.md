@@ -23,7 +23,7 @@ To select the field `my_value` set the parameter `frontmatterkey=my_item`.
 my_item:
     second_item: my_value
 ```
-To select the field `my_value` use `frontmatterkey=[my_item,second_item]`.  The value of `frontmatterkey` is the ordered list of keys to access your value to copy. Each key needs to be separated via `,`.
+To select the field `my_value` use `frontmatterkey=my_item,second_item`.  The value of `frontmatterkey` is the ordered list of keys to access your value to copy. Each key needs to be separated via `,`.
 
 ```yaml
 my_item:
@@ -31,7 +31,7 @@ my_item:
     - A
     - B
 ```
-To select `B` use `frontmatterkey=[my_item,second_item,1]`, because `B` is at index `1` in the list.
+To select `B` use `frontmatterkey=my_item,second_item,1`, because `B` is at index `1` in the list.
 
 
 ## Read Frontmatter
@@ -40,7 +40,7 @@ You can copy values of your frontmatter to the clipboard using a [file identifie
 
 **Complete example:**
 ```
-obsidian://adv-uri?vault=<vault>&filepath=MyFile&frontmatterkey=[my_item,second_item,1]
+obsidian://adv-uri?vault=<vault>&filepath=MyFile&frontmatterkey=my_item,second_item,1
 ```
 
 ## Write Frontmatter
@@ -72,7 +72,7 @@ my_item:
 ```
 
 ```
-obsidian://adv-uri?vault=<vault>&filepath=MyFile&frontmatterkey=[my_item,second_item,1]&data=NewValue
+obsidian://adv-uri?vault=<vault>&filepath=MyFile&frontmatterkey=my_item,second_item,1&data=NewValue
 ```
 
 ### Complex Structure
@@ -100,6 +100,6 @@ my_item:
 ```
 
 ```
-obsidian://adv-uri?vault=<vault>&filepath=MyFile&frontmatterkey=[my_item,second_item,1]&data={%22data%22:[2,3]}
+obsidian://adv-uri?vault=<vault>&filepath=MyFile&frontmatterkey=my_item,second_item,1&data={%22data%22:[2,3]}
 ```
 

@@ -1,0 +1,1054 @@
+{
+  "inputs": {
+    "src/constants.ts": {
+      "bytes": 500,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/modals/command_modal.ts": {
+      "bytes": 1096,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/modals/file_modal.ts": {
+      "bytes": 1257,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/modals/replace_modal.ts": {
+      "bytes": 1309,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/modals/search_modal.ts": {
+      "bytes": 1236,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/settings.ts": {
+      "bytes": 6942,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/rng.js": {
+      "bytes": 1040,
+      "imports": [],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/regex.js": {
+      "bytes": 133,
+      "imports": [],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/validate.js": {
+      "bytes": 141,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/regex.js",
+          "kind": "import-statement",
+          "original": "./regex.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/stringify.js": {
+      "bytes": 1463,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/validate.js",
+          "kind": "import-statement",
+          "original": "./validate.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v1.js": {
+      "bytes": 3296,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/rng.js",
+          "kind": "import-statement",
+          "original": "./rng.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/stringify.js",
+          "kind": "import-statement",
+          "original": "./stringify.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/parse.js": {
+      "bytes": 1104,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/validate.js",
+          "kind": "import-statement",
+          "original": "./validate.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v35.js": {
+      "bytes": 1657,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/stringify.js",
+          "kind": "import-statement",
+          "original": "./stringify.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/parse.js",
+          "kind": "import-statement",
+          "original": "./parse.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/md5.js": {
+      "bytes": 6852,
+      "imports": [],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v3.js": {
+      "bytes": 105,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v35.js",
+          "kind": "import-statement",
+          "original": "./v35.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/md5.js",
+          "kind": "import-statement",
+          "original": "./md5.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v4.js": {
+      "bytes": 544,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/rng.js",
+          "kind": "import-statement",
+          "original": "./rng.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/stringify.js",
+          "kind": "import-statement",
+          "original": "./stringify.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/sha1.js": {
+      "bytes": 2488,
+      "imports": [],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v5.js": {
+      "bytes": 108,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v35.js",
+          "kind": "import-statement",
+          "original": "./v35.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/sha1.js",
+          "kind": "import-statement",
+          "original": "./sha1.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/nil.js": {
+      "bytes": 54,
+      "imports": [],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/version.js": {
+      "bytes": 200,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/validate.js",
+          "kind": "import-statement",
+          "original": "./validate.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/index.js": {
+      "bytes": 412,
+      "imports": [
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v1.js",
+          "kind": "import-statement",
+          "original": "./v1.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v3.js",
+          "kind": "import-statement",
+          "original": "./v3.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v4.js",
+          "kind": "import-statement",
+          "original": "./v4.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v5.js",
+          "kind": "import-statement",
+          "original": "./v5.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/nil.js",
+          "kind": "import-statement",
+          "original": "./nil.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/version.js",
+          "kind": "import-statement",
+          "original": "./version.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/validate.js",
+          "kind": "import-statement",
+          "original": "./validate.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/stringify.js",
+          "kind": "import-statement",
+          "original": "./stringify.js"
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/parse.js",
+          "kind": "import-statement",
+          "original": "./parse.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/status_error.ts": {
+      "bytes": 8003,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/lib/result.ts": {
+      "bytes": 7388,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/utils.ts": {
+      "bytes": 3784,
+      "imports": [
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "./lib/status_error"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "./lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/tools.ts": {
+      "bytes": 7682,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/index.js",
+          "kind": "import-statement",
+          "original": "uuid"
+        },
+        {
+          "path": "src/utils.ts",
+          "kind": "import-statement",
+          "original": "./utils"
+        },
+        {
+          "path": "src/constants.ts",
+          "kind": "import-statement",
+          "original": "./constants"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "./lib/result"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "./lib/status_error"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/filesystem/set_cursor_in_line.ts": {
+      "bytes": 2420,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/lib/option.ts": {
+      "bytes": 4281,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/filesystem/open_file.ts": {
+      "bytes": 4181,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/utils.ts",
+          "kind": "import-statement",
+          "original": "../utils"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        },
+        {
+          "path": "src/lib/option.ts",
+          "kind": "import-statement",
+          "original": "../lib/option"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/filesystem/open_existing_file_and_set_cursor.ts": {
+      "bytes": 1398,
+      "imports": [
+        {
+          "path": "src/filesystem/set_cursor_in_line.ts",
+          "kind": "import-statement",
+          "original": "./set_cursor_in_line"
+        },
+        {
+          "path": "src/filesystem/open_file.ts",
+          "kind": "import-statement",
+          "original": "./open_file"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/filesystem/write_and_open_file.ts": {
+      "bytes": 1924,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/filesystem/open_existing_file_and_set_cursor.ts",
+          "kind": "import-statement",
+          "original": "./open_existing_file_and_set_cursor"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/filesystem/append.ts": {
+      "bytes": 2056,
+      "imports": [
+        {
+          "path": "src/utils.ts",
+          "kind": "import-statement",
+          "original": "src/utils"
+        },
+        {
+          "path": "src/filesystem/write_and_open_file.ts",
+          "kind": "import-statement",
+          "original": "./write_and_open_file"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/filesystem/prepend.ts": {
+      "bytes": 2385,
+      "imports": [
+        {
+          "path": "src/utils.ts",
+          "kind": "import-statement",
+          "original": "../utils"
+        },
+        {
+          "path": "src/filesystem/write_and_open_file.ts",
+          "kind": "import-statement",
+          "original": "./write_and_open_file"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/filesystem/set_cursor.ts": {
+      "bytes": 1611,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/filesystem/index.ts": {
+      "bytes": 242,
+      "imports": [
+        {
+          "path": "src/filesystem/append.ts",
+          "kind": "import-statement",
+          "original": "./append"
+        },
+        {
+          "path": "src/filesystem/open_existing_file_and_set_cursor.ts",
+          "kind": "import-statement",
+          "original": "./open_existing_file_and_set_cursor"
+        },
+        {
+          "path": "src/filesystem/open_file.ts",
+          "kind": "import-statement",
+          "original": "./open_file"
+        },
+        {
+          "path": "src/filesystem/prepend.ts",
+          "kind": "import-statement",
+          "original": "./prepend"
+        },
+        {
+          "path": "src/filesystem/set_cursor_in_line.ts",
+          "kind": "import-statement",
+          "original": "./set_cursor_in_line"
+        },
+        {
+          "path": "src/filesystem/set_cursor.ts",
+          "kind": "import-statement",
+          "original": "./set_cursor"
+        },
+        {
+          "path": "src/filesystem/write_and_open_file.ts",
+          "kind": "import-statement",
+          "original": "./write_and_open_file"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/handler_utils.ts": {
+      "bytes": 4631,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/filesystem/index.ts",
+          "kind": "import-statement",
+          "original": "../filesystem"
+        },
+        {
+          "path": "src/utils.ts",
+          "kind": "import-statement",
+          "original": "../utils"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/handle_command.ts": {
+      "bytes": 1971,
+      "imports": [
+        {
+          "path": "src/handlers/handler_utils.ts",
+          "kind": "import-statement",
+          "original": "./handler_utils"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/handle_eval.ts": {
+      "bytes": 1141,
+      "imports": [
+        {
+          "path": "src/handlers/handler_utils.ts",
+          "kind": "import-statement",
+          "original": "./handler_utils"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/handle_frontmatter_key.ts": {
+      "bytes": 4246,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/utils.ts",
+          "kind": "import-statement",
+          "original": "../utils"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/handle_open.ts": {
+      "bytes": 5007,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/filesystem/index.ts",
+          "kind": "import-statement",
+          "original": "../filesystem"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/handle_open_block.ts": {
+      "bytes": 2511,
+      "imports": [
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "src/lib/status_error"
+        },
+        {
+          "path": "src/filesystem/index.ts",
+          "kind": "import-statement",
+          "original": "../filesystem"
+        },
+        {
+          "path": "src/utils.ts",
+          "kind": "import-statement",
+          "original": "../utils"
+        },
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/handle_plugin_management.ts": {
+      "bytes": 1838,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/handle_write.ts": {
+      "bytes": 3292,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/filesystem/index.ts",
+          "kind": "import-statement",
+          "original": "src/filesystem"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "../lib/result"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "../lib/status_error"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/handlers/index.ts": {
+      "bytes": 251,
+      "imports": [
+        {
+          "path": "src/handlers/handle_command.ts",
+          "kind": "import-statement",
+          "original": "./handle_command"
+        },
+        {
+          "path": "src/handlers/handle_eval.ts",
+          "kind": "import-statement",
+          "original": "./handle_eval"
+        },
+        {
+          "path": "src/handlers/handle_frontmatter_key.ts",
+          "kind": "import-statement",
+          "original": "./handle_frontmatter_key"
+        },
+        {
+          "path": "src/handlers/handle_open.ts",
+          "kind": "import-statement",
+          "original": "./handle_open"
+        },
+        {
+          "path": "src/handlers/handle_open_block.ts",
+          "kind": "import-statement",
+          "original": "./handle_open_block"
+        },
+        {
+          "path": "src/handlers/handle_plugin_management.ts",
+          "kind": "import-statement",
+          "original": "./handle_plugin_management"
+        },
+        {
+          "path": "src/handlers/handle_write.ts",
+          "kind": "import-statement",
+          "original": "./handle_write"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/modals/enter_data_modal.ts": {
+      "bytes": 2586,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/main.ts": {
+      "bytes": 10583,
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/constants.ts",
+          "kind": "import-statement",
+          "original": "./constants"
+        },
+        {
+          "path": "src/modals/command_modal.ts",
+          "kind": "import-statement",
+          "original": "./modals/command_modal"
+        },
+        {
+          "path": "src/modals/file_modal.ts",
+          "kind": "import-statement",
+          "original": "./modals/file_modal"
+        },
+        {
+          "path": "src/modals/replace_modal.ts",
+          "kind": "import-statement",
+          "original": "./modals/replace_modal"
+        },
+        {
+          "path": "src/modals/search_modal.ts",
+          "kind": "import-statement",
+          "original": "./modals/search_modal"
+        },
+        {
+          "path": "src/settings.ts",
+          "kind": "import-statement",
+          "original": "./settings"
+        },
+        {
+          "path": "src/tools.ts",
+          "kind": "import-statement",
+          "original": "./tools"
+        },
+        {
+          "path": "src/lib/result.ts",
+          "kind": "import-statement",
+          "original": "./lib/result"
+        },
+        {
+          "path": "src/lib/status_error.ts",
+          "kind": "import-statement",
+          "original": "./lib/status_error"
+        },
+        {
+          "path": "src/handlers/index.ts",
+          "kind": "import-statement",
+          "original": "./handlers/index"
+        },
+        {
+          "path": "src/modals/enter_data_modal.ts",
+          "kind": "import-statement",
+          "original": "./modals/enter_data_modal"
+        }
+      ],
+      "format": "esm"
+    }
+  },
+  "outputs": {
+    "dist/main.js": {
+      "imports": [
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "obsidian",
+          "kind": "require-call",
+          "external": true
+        }
+      ],
+      "exports": [],
+      "entryPoint": "src/main.ts",
+      "inputs": {
+        "src/main.ts": {
+          "bytesInOutput": 3047
+        },
+        "src/constants.ts": {
+          "bytesInOutput": 248
+        },
+        "src/modals/command_modal.ts": {
+          "bytesInOutput": 336
+        },
+        "src/modals/file_modal.ts": {
+          "bytesInOutput": 512
+        },
+        "src/modals/replace_modal.ts": {
+          "bytesInOutput": 587
+        },
+        "src/modals/search_modal.ts": {
+          "bytesInOutput": 451
+        },
+        "src/settings.ts": {
+          "bytesInOutput": 3746
+        },
+        "src/tools.ts": {
+          "bytesInOutput": 2830
+        },
+        "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/rng.js": {
+          "bytesInOutput": 397
+        },
+        "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/regex.js": {
+          "bytesInOutput": 125
+        },
+        "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/validate.js": {
+          "bytesInOutput": 63
+        },
+        "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/stringify.js": {
+          "bytesInOutput": 426
+        },
+        "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/v4.js": {
+          "bytesInOutput": 167
+        },
+        "node_modules/.pnpm/uuid@8.3.2/node_modules/uuid/dist/esm-browser/index.js": {
+          "bytesInOutput": 0
+        },
+        "src/lib/status_error.ts": {
+          "bytesInOutput": 1305
+        },
+        "src/lib/result.ts": {
+          "bytesInOutput": 634
+        },
+        "src/utils.ts": {
+          "bytesInOutput": 1171
+        },
+        "src/handlers/handler_utils.ts": {
+          "bytesInOutput": 1114
+        },
+        "src/filesystem/write_and_open_file.ts": {
+          "bytesInOutput": 515
+        },
+        "src/filesystem/set_cursor_in_line.ts": {
+          "bytesInOutput": 785
+        },
+        "src/filesystem/open_file.ts": {
+          "bytesInOutput": 1372
+        },
+        "src/lib/option.ts": {
+          "bytesInOutput": 455
+        },
+        "src/filesystem/open_existing_file_and_set_cursor.ts": {
+          "bytesInOutput": 242
+        },
+        "src/filesystem/append.ts": {
+          "bytesInOutput": 434
+        },
+        "src/filesystem/index.ts": {
+          "bytesInOutput": 0
+        },
+        "src/filesystem/prepend.ts": {
+          "bytesInOutput": 535
+        },
+        "src/filesystem/set_cursor.ts": {
+          "bytesInOutput": 581
+        },
+        "src/handlers/handle_command.ts": {
+          "bytesInOutput": 487
+        },
+        "src/handlers/index.ts": {
+          "bytesInOutput": 0
+        },
+        "src/handlers/handle_eval.ts": {
+          "bytesInOutput": 134
+        },
+        "src/handlers/handle_frontmatter_key.ts": {
+          "bytesInOutput": 1047
+        },
+        "src/handlers/handle_open.ts": {
+          "bytesInOutput": 1645
+        },
+        "src/handlers/handle_open_block.ts": {
+          "bytesInOutput": 854
+        },
+        "src/handlers/handle_plugin_management.ts": {
+          "bytesInOutput": 618
+        },
+        "src/handlers/handle_write.ts": {
+          "bytesInOutput": 781
+        },
+        "src/modals/enter_data_modal.ts": {
+          "bytesInOutput": 704
+        }
+      },
+      "bytes": 28959
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { SuggestModal } from "obsidian";
-import AdvancedURI from "../main";
-import { SearchModalData } from "../types";
+import type AdvancedURI from "../main";
+import type { SearchModalData } from "../types";
 
 export class ReplaceModal extends SuggestModal<string> {
     plugin: AdvancedURI;
@@ -31,13 +31,13 @@ export class ReplaceModal extends SuggestModal<string> {
             this.plugin.tools.copyURI({
                 filepath: this.filepath,
                 searchregex: this.search.source,
-                replace: item == this.emptyText ? "" : item,
+                replace: item == this.emptyText ? "" : item
             });
         } else {
             this.plugin.tools.copyURI({
                 filepath: this.filepath,
                 search: this.search.source,
-                replace: item == this.emptyText ? "" : item,
+                replace: item == this.emptyText ? "" : item
             });
         }
     }

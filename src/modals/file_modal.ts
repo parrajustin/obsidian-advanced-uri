@@ -1,7 +1,8 @@
 import { FuzzySuggestModal } from "obsidian";
-import AdvancedURI from "../main";
-import { FileModalData } from "../types";
+import type AdvancedURI from "../main";
+import type { FileModalData } from "../types";
 
+/** Modal to fuzzy select a file. */
 export class FileModal extends FuzzySuggestModal<FileModalData> {
     plugin: AdvancedURI;
     constructor(
@@ -15,11 +16,11 @@ export class FileModal extends FuzzySuggestModal<FileModalData> {
     }
 
     getItems(): FileModalData[] {
-        let specialItems: FileModalData[] = [];
+        const specialItems: FileModalData[] = [];
         if (this.allowNoFile) {
             specialItems.push({
                 display: "<Don't specify a file>",
-                source: undefined,
+                source: undefined
             });
         }
         const file = this.app.workspace.getActiveFile();
@@ -30,7 +31,7 @@ export class FileModal extends FuzzySuggestModal<FileModalData> {
             ...specialItems,
             ...this.app.vault.getFiles().map((e) => {
                 return { display: e.path, source: e.path };
-            }),
+            })
         ];
     }
 
@@ -38,5 +39,5 @@ export class FileModal extends FuzzySuggestModal<FileModalData> {
         return item.display;
     }
 
-    onChooseItem(item: FileModalData, evt: MouseEvent | KeyboardEvent): void {}
+    onChooseItem(_: FileModalData): void {}
 }
