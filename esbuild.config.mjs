@@ -31,7 +31,6 @@ const context = await esbuild.context({
 if (prod) {
     const result = await context.rebuild();
 
-
     await writeFile("dist/meta.json", JSON.stringify(result.metafile, undefined, 2));
     process.exit(0);
 } else {
