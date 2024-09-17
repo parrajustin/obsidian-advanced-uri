@@ -204,8 +204,10 @@ export default class AdvancedURI extends Plugin {
             console.log("adding ForeignHandler", data, `is enabled "${isEnabled}".`);
             this.registeredHandlers.add({ data, enabled: isEnabled });
         };
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.registerEvent(this.app.workspace.on("register-foreign-handler" as any, callback));
+        this.registerEvent(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            this.app.workspace.on("obsidian-advanced-uri:register-foreign-handler" as any, callback)
+        );
         this._readyPromiseResolve();
     }
 

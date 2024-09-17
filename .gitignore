@@ -8,6 +8,7 @@ main.js
 
 # build
 *.js.map
+dist/meta.json
 
 .prettierignore
 /data.json
