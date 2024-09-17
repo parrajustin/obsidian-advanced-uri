@@ -3,11 +3,13 @@
     "version": "1.44.1",
     "description": "Advanced modes for Obsidian URI",
     "main": "main.js",
+    "type": "module",
     "scripts": {
         "dev": "node esbuild.config.mjs dev",
         "build": "node esbuild.config.mjs production",
         "release": "standard-version",
-        "format": "prettier src --check"
+        "format": "prettier src --check",
+        "lint": "eslint"
     },
     "keywords": [],
     "standard-version": {
@@ -21,6 +23,7 @@
         "@typescript-eslint/eslint-plugin": "7.8.0",
         "@typescript-eslint/parser": "7.8.0",
         "esbuild": "0.21.1",
+        "eslint": "9.10.0",
         "eslint-config-prettier": "9.1.0",
         "eslint-plugin-prettier": "5.1.3",
         "obsidian": "1.6.6",

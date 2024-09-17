@@ -1,5 +1,4 @@
-import type { PaneType, View } from "obsidian";
-import type { CanvasNodeData } from "obsidian/canvas";
+import type { PaneType } from "obsidian";
 import type {
     CommandUriParams,
     EvalUriParams,
@@ -15,33 +14,42 @@ declare module "obsidian" {
     interface App {
         appId: string;
         commands: {
-            executeCommandById(id: string): void;
             commands: {
                 [key: string]: Command;
             };
+            executeCommandById(id: string): void;
         };
 
         plugins: {
             plugins: {
-                [key: string]: { manifest: PluginManifest };
-                "obsidian-hover-editor": {
-                    spawnPopover(
-                        initiatingEl?: HTMLElement,
-                        onShowCallback?: () => unknown
-                    ): WorkspaceLeaf;
-                    manifest: PluginManifest;
-                };
+                [key: string]: { manifest: PluginManifest } | undefined;
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "obsidian-hover-editor":
+                    | {
+                          manifest: PluginManifest;
+                          spawnPopover(
+                              initiatingEl?: HTMLElement,
+                              onShowCallback?: () => unknown
+                          ): WorkspaceLeaf;
+                      }
+                    | undefined;
+            };
+            updates: {
+                [key: string]: unknown;
             };
             enablePluginAndSave(plugin: string): void;
             disablePluginAndSave(plugin: string): void;
             getPlugin(plugin: string): Plugin | null;
             checkForUpdates(): Promise<void>;
-            updates: {
-                [key: string]: unknown;
-            };
         };
 
         internalPlugins: {
+            plugins: {
+                [key: string]: {
+                    disable(_: boolean): void;
+                    enable(_: boolean): void;
+                };
+            };
             getEnabledPluginById(plugin: string): Plugin;
             getEnabledPluginById(plugin: "bookmarks"): {
                 openBookmark(bookmark: Bookmark, viewmode: PaneType | boolean): void;
@@ -53,12 +61,6 @@ declare module "obsidian" {
                 saveWorkspace(workspace: string): void;
                 loadWorkspace(workspace: string): void;
             } | null;
-            plugins: {
-                [key: string]: {
-                    disable(_: boolean): void;
-                    enable(_: boolean): void;
-                };
-            };
         };
     }
     interface Bookmark {
@@ -91,13 +93,13 @@ declare module "obsidian" {
 
 export interface FileModalData {
     // File path in vault to the source.
-    source: string;
+    source: string | undefined;
     // What is displayed in the modal.
     display: string;
 }
 
 export interface EnterData {
-    mode: string;
+    mode: string | null;
     data: string;
     display: string;
     func: () => void;
@@ -127,11 +129,11 @@ export interface MultiCommandParams {
 }
 
 export interface EmitEventParams {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any;
     type: "event";
     // Name of the event to emit.
     eventName: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: any;
 }
 
 /** The default params from the protocl handler. */
@@ -206,30 +208,8 @@ export type FullParameters = Parameters & DefaultParams;
 
 export type OpenMode = "silent" | "popover" | PaneType | "true" | "false";
 
-export interface HookParameters {
-    "x-success": string;
-    "x-error": string;
-}
-
 export interface SearchModalData {
     source: string;
     display: string;
     isRegEx: boolean;
-}
-
-export interface CanvasView extends View {
-    canvas: {
-        selection: Set<CanvasNodeData>;
-        zoomToSelection(): void;
-        nodes: Map<string, CanvasNodeData>;
-        select(node: CanvasNodeData): void;
-        /*
-         * Update `selection` in `func`
-         */
-        updateSelection(func: () => void): void;
-        tx: number;
-        ty: number;
-        tZoom: number;
-        markViewportChanged(): void;
-    };
 }

@@ -9,15 +9,15 @@ export class SettingsTab extends PluginSettingTab {
         this.plugin = plugin;
     }
 
-    display(): void {
+    public display(): void {
         const { containerEl } = this;
         containerEl.empty();
         containerEl.createEl("h2", { text: this.plugin.manifest.name });
 
         new Setting(containerEl).setName("Open file on write").addToggle((cb) =>
-            cb.setValue(this.plugin.settings.openFileOnWrite).onChange((value) => {
+            cb.setValue(this.plugin.settings.openFileOnWrite).onChange(async (value) => {
                 this.plugin.settings.openFileOnWrite = value;
-                this.plugin.saveSettings();
+                await this.plugin.saveSettings();
             })
         );
 
@@ -25,38 +25,42 @@ export class SettingsTab extends PluginSettingTab {
             .setName("Open file on write in a new pane")
             .setDisabled(this.plugin.settings.openFileOnWrite)
             .addToggle((cb) =>
-                cb.setValue(this.plugin.settings.openFileOnWriteInNewPane).onChange((value) => {
-                    this.plugin.settings.openFileOnWriteInNewPane = value;
-                    this.plugin.saveSettings();
-                })
+                cb
+                    .setValue(this.plugin.settings.openFileOnWriteInNewPane)
+                    .onChange(async (value) => {
+                        this.plugin.settings.openFileOnWriteInNewPane = value;
+                        await this.plugin.saveSettings();
+                    })
             );
 
         new Setting(containerEl).setName("Open daily note in a new pane").addToggle((cb) =>
-            cb.setValue(this.plugin.settings.openDailyInNewPane).onChange((value) => {
+            cb.setValue(this.plugin.settings.openDailyInNewPane).onChange(async (value) => {
                 this.plugin.settings.openDailyInNewPane = value;
-                this.plugin.saveSettings();
+                await this.plugin.saveSettings();
             })
         );
 
         new Setting(containerEl).setName("Open file without write in new pane").addToggle((cb) =>
-            cb.setValue(this.plugin.settings.openFileWithoutWriteInNewPane).onChange((value) => {
-                this.plugin.settings.openFileWithoutWriteInNewPane = value;
-                this.plugin.saveSettings();
-            })
+            cb
+                .setValue(this.plugin.settings.openFileWithoutWriteInNewPane)
+                .onChange(async (value) => {
+                    this.plugin.settings.openFileWithoutWriteInNewPane = value;
+                    await this.plugin.saveSettings();
+                })
         );
 
         new Setting(containerEl).setName("Use UID instead of file paths").addToggle((cb) =>
-            cb.setValue(this.plugin.settings.useUID).onChange((value) => {
+            cb.setValue(this.plugin.settings.useUID).onChange(async (value) => {
                 this.plugin.settings.useUID = value;
-                this.plugin.saveSettings();
+                await this.plugin.saveSettings();
                 this.display();
             })
         );
 
         new Setting(containerEl).setName("Include vault name/ID parameter").addToggle((cb) =>
-            cb.setValue(this.plugin.settings.includeVaultName).onChange((value) => {
+            cb.setValue(this.plugin.settings.includeVaultName).onChange(async (value) => {
                 this.plugin.settings.includeVaultName = value;
-                this.plugin.saveSettings();
+                await this.plugin.saveSettings();
                 this.display();
             })
         );
@@ -72,9 +76,9 @@ export class SettingsTab extends PluginSettingTab {
                         .addOption("name", "Name")
                         .addOption("id", "ID")
                         .setValue(this.plugin.settings.vaultParam)
-                        .onChange((value: "id" | "name") => {
+                        .onChange(async (value: "id" | "name") => {
                             this.plugin.settings.vaultParam = value;
-                            this.plugin.saveSettings();
+                            await this.plugin.saveSettings();
                         })
                 );
         }
@@ -86,16 +90,18 @@ export class SettingsTab extends PluginSettingTab {
                     "When using UID instead of file paths, you can still add the filepath parameter to know what this URI is about. It's NOT actually used."
                 )
                 .addToggle((cb) =>
-                    cb.setValue(this.plugin.settings.addFilepathWhenUsingUID).onChange((value) => {
-                        this.plugin.settings.addFilepathWhenUsingUID = value;
-                        this.plugin.saveSettings();
-                    })
+                    cb
+                        .setValue(this.plugin.settings.addFilepathWhenUsingUID)
+                        .onChange(async (value) => {
+                            this.plugin.settings.addFilepathWhenUsingUID = value;
+                            await this.plugin.saveSettings();
+                        })
                 );
         }
         new Setting(containerEl).setName("UID field in frontmatter").addText((cb) =>
-            cb.setValue(this.plugin.settings.idField).onChange((value) => {
+            cb.setValue(this.plugin.settings.idField).onChange(async (value) => {
                 this.plugin.settings.idField = value;
-                this.plugin.saveSettings();
+                await this.plugin.saveSettings();
             })
         );
 
@@ -105,9 +111,9 @@ export class SettingsTab extends PluginSettingTab {
                 "⚠️ This can be dangerous as it allows executing arbitrary code. Only enable this if you trust the source of the URIs you are using and know what you are doing. ⚠️"
             )
             .addToggle((cb) =>
-                cb.setValue(this.plugin.settings.allowEval).onChange((value) => {
+                cb.setValue(this.plugin.settings.allowEval).onChange(async (value) => {
                     this.plugin.settings.allowEval = value;
-                    this.plugin.saveSettings();
+                    await this.plugin.saveSettings();
                 })
             );
 
@@ -123,7 +129,7 @@ export class SettingsTab extends PluginSettingTab {
                         .setValue(
                             this.plugin.settings.enabledForeignTypes.includes(handler.data.type)
                         )
-                        .onChange((value) => {
+                        .onChange(async (value) => {
                             if (value) {
                                 this.plugin.settings.enabledForeignTypes.push(handler.data.type);
                             } else {
@@ -132,7 +138,7 @@ export class SettingsTab extends PluginSettingTab {
                                         (f) => f !== handler.data.type
                                     );
                             }
-                            this.plugin.saveSettings();
+                            await this.plugin.saveSettings();
                         })
                 );
         }
@@ -147,14 +153,14 @@ export class SettingsTab extends PluginSettingTab {
                 .setName(`Allow "unregistered" foreign handler "${type}".`)
                 .setDesc("waiting to be registered.")
                 .addToggle((cb) =>
-                    cb.setValue(true).onChange((value) => {
+                    cb.setValue(true).onChange(async (value) => {
                         if (value) {
                             this.plugin.settings.enabledForeignTypes.push(type);
                         } else {
                             this.plugin.settings.enabledForeignTypes =
                                 this.plugin.settings.enabledForeignTypes.filter((f) => f !== type);
                         }
-                        this.plugin.saveSettings();
+                        await this.plugin.saveSettings();
                     })
                 );
         }

@@ -1,5 +1,5 @@
 import { Notice, TFile } from "obsidian";
-import { copyText } from "../utils";
+import { CopyText } from "../utils";
 import type AdvancedURI from "../main";
 import type { StatusResult } from "../lib/result";
 import { Err, Ok } from "../lib/result";
@@ -69,10 +69,10 @@ function GetFrontmatterItem(frontmatter: any, path: string): FrontmatterRef | un
 }
 
 /** Handle frontmatter data for the given file or active file if none specified. */
-export function HandleFrontmatterKey(
+export async function HandleFrontmatterKey(
     parameters: FrontmatterUriParams,
     pluginClass: AdvancedURI
-): StatusResult<StatusError> {
+): Promise<StatusResult<StatusError>> {
     const filePath = parameters.filepath ?? pluginClass.app.workspace.getActiveFile()?.path;
     if (filePath === undefined) {
         return Err(InvalidArgumentError("No file path provided."));
@@ -85,7 +85,7 @@ export function HandleFrontmatterKey(
     if (cache === null) {
         return Err(NotFoundError(`Could not find the file cache for "${filePath}".`));
     }
-    const frontmatter = cache.frontmatter;
+    const cachedFrontmatter = cache.frontmatter;
 
     const data = parameters.data;
     if (data !== undefined && parameters.data !== "") {
@@ -99,16 +99,16 @@ export function HandleFrontmatterKey(
             new Notice(`Failed to parse "${data}"`);
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        pluginClass.app.fileManager.processFrontMatter(file, (frontmatter: any) => {
+        await pluginClass.app.fileManager.processFrontMatter(file, (frontmatter: any) => {
             const frontmatterItem = GetFrontmatterItem(frontmatter, parameters.frontmatterkey);
             if (frontmatterItem !== undefined) {
                 frontmatterItem.parent[frontmatterItem.itemKey] = parsedData;
             }
         });
     } else {
-        const frontmatterItem = GetFrontmatterItem(frontmatter, parameters.frontmatterkey);
+        const frontmatterItem = GetFrontmatterItem(cachedFrontmatter, parameters.frontmatterkey);
         if (frontmatterItem !== undefined) {
-            copyText(frontmatterItem.item);
+            await CopyText(frontmatterItem.item);
         }
     }
 

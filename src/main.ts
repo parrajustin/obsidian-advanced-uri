@@ -1,3 +1,4 @@
+import type { App, PluginManifest } from "obsidian";
 import { MarkdownView, Notice, Plugin, TFile } from "obsidian";
 import { DEFAULT_SETTINGS, URI_LINK } from "./constants";
 import { CommandModal } from "./modals/command_modal";
@@ -26,6 +27,7 @@ import {
     HandleWrite
 } from "./handlers/index";
 import { EnterDataModal } from "./modals/enter_data_modal";
+import { CreateExternallyResolvablePromise } from "./lib/externalPromise";
 
 export interface ForeignHandlerRegister {
     // Name for the handler.
@@ -48,13 +50,20 @@ export interface ForeignHandlerEntry {
  * The plugin main class.
  */
 export default class AdvancedURI extends Plugin {
-    settings: AdvancedURISettings;
-    tools = new Tools(this);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public settings: AdvancedURISettings;
+    public tools = new Tools(this);
     public registeredHandlers = new Set<ForeignHandlerEntry>();
+    public readyPromise: Promise<void>;
+    private _readyPromiseResolve: () => void;
 
-    async onload() {
+    constructor(app: App, manifest: PluginManifest) {
+        super(app, manifest);
+        const { promise, resolve } = CreateExternallyResolvablePromise<void>();
+        this.readyPromise = promise;
+        this._readyPromiseResolve = resolve;
+    }
+
+    public async onload() {
         await this.loadSettings();
         this.addSettingTab(new SettingsTab(this.app, this));
 
@@ -65,6 +74,9 @@ export default class AdvancedURI extends Plugin {
                 const fileModal = new FileModal(this, "Choose a file", /*allowNoFile=*/ false);
                 fileModal.open();
                 fileModal.onChooseItem = (item) => {
+                    if (item.source === undefined) {
+                        return;
+                    }
                     new EnterDataModal(this, item.source).open();
                 };
             }
@@ -102,10 +114,14 @@ export default class AdvancedURI extends Plugin {
                 const fileModal = new FileModal(this, "Used file for search and replace");
                 fileModal.open();
                 fileModal.onChooseItem = (filePath: FileModalData) => {
+                    const source = filePath.source;
+                    if (source === undefined) {
+                        return;
+                    }
                     const searchModal = new SearchModal(this);
                     searchModal.open();
                     searchModal.onChooseSuggestion = (item: SearchModalData) => {
-                        new ReplaceModal(this, item, filePath?.source).open();
+                        new ReplaceModal(this, item, source).open();
                     };
                 };
             }
@@ -121,7 +137,7 @@ export default class AdvancedURI extends Plugin {
                 );
                 fileModal.open();
                 fileModal.onChooseItem = (item: FileModalData) => {
-                    new CommandModal(this, item?.source).open();
+                    new CommandModal(this, item.source).open();
                 };
             }
         });
@@ -147,7 +163,7 @@ export default class AdvancedURI extends Plugin {
             const parameters = e as unknown as Parameters;
             console.log("registerObsidianProtocolHandler", parameters);
 
-            // this.onUriCall(parameters);
+            await this.executeHandler(parameters);
         });
 
         this.registerEvent(
@@ -179,6 +195,8 @@ export default class AdvancedURI extends Plugin {
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const callback: any = (data: ForeignHandlerRegister) => {
+            // Need to check the params are declared due to being called externally.
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (data.desc === undefined || data.func === undefined || data.type === undefined) {
                 return;
             }
@@ -188,6 +206,11 @@ export default class AdvancedURI extends Plugin {
         };
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.registerEvent(this.app.workspace.on("register-foreign-handler" as any, callback));
+        this._readyPromiseResolve();
+    }
+
+    public async saveSettings() {
+        await this.saveData(this.settings);
     }
 
     /**
@@ -195,7 +218,7 @@ export default class AdvancedURI extends Plugin {
      * @param parameters handler parameters
      * @returns status of the execution
      */
-    async executeHandler(parameters: Parameters): Promise<StatusResult<StatusError>> {
+    private async executeHandler(parameters: Parameters): Promise<StatusResult<StatusError>> {
         let statusResult: StatusResult<StatusError> | undefined;
         switch (parameters.type) {
             case "command": {
@@ -207,7 +230,7 @@ export default class AdvancedURI extends Plugin {
                 break;
             }
             case "frontmatter": {
-                statusResult = HandleFrontmatterKey(parameters, this);
+                statusResult = await HandleFrontmatterKey(parameters, this);
                 break;
             }
             case "open-block": {
@@ -244,7 +267,7 @@ export default class AdvancedURI extends Plugin {
                     }
                 }
                 if (foundHandler !== undefined) {
-                    foundHandler?.data.func(parameters);
+                    await foundHandler.data.func(parameters);
                     break;
                 }
 
@@ -266,7 +289,7 @@ export default class AdvancedURI extends Plugin {
         return Ok();
     }
 
-    executeEventHandler(parameters: EmitEventParams) {
+    private executeEventHandler(parameters: EmitEventParams) {
         this.app.workspace.trigger(parameters.eventName, parameters);
     }
 
@@ -275,7 +298,9 @@ export default class AdvancedURI extends Plugin {
      * @param parameters params
      * @returns result of status
      */
-    async executeMultiHandler(parameters: MultiCommandParams): Promise<StatusResult<StatusError>> {
+    private async executeMultiHandler(
+        parameters: MultiCommandParams
+    ): Promise<StatusResult<StatusError>> {
         const data = JSON.parse(decodeURIComponent(parameters.comamnds)) as Parameters[];
         if (!(data instanceof Array)) {
             return Err(InvalidArgumentError(`Failed to parse "${parameters.comamnds}" as array.`));
@@ -290,11 +315,7 @@ export default class AdvancedURI extends Plugin {
         return Ok();
     }
 
-    async loadSettings() {
+    private async loadSettings() {
         this.settings = Object.assign(DEFAULT_SETTINGS, await this.loadData());
-    }
-
-    async saveSettings() {
-        await this.saveData(this.settings);
     }
 }

@@ -36,7 +36,7 @@ export class NoneImpl implements BaseOption<never> {
      *
      *  (This is the `unwrap_or` in rust)
      */
-    valueOr<T2>(val: T2): T2 {
+    public valueOr<T2>(val: T2): T2 {
         return val;
     }
 
@@ -47,7 +47,7 @@ export class NoneImpl implements BaseOption<never> {
      * This function can be used to compose the Options of two functions.
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    map(_mapper: unknown): None {
+    public map(_mapper: unknown): None {
         return this;
     }
 
@@ -56,22 +56,20 @@ export class NoneImpl implements BaseOption<never> {
      * This function can be used for control flow based on `Option` values.
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    andThen(_op: unknown): None {
+    public andThen(_op: unknown): None {
         return this;
     }
 }
 
 // Export None as a singleton, then freeze it so it can't be modified
-export const None = new NoneImpl();
+export const NONE = new NoneImpl();
 export type None = NoneImpl;
-Object.freeze(None);
+Object.freeze(NONE);
 
 /**
  * Contains the success value
  */
 export class SomeImpl<T> implements BaseOption<T> {
-    static readonly EMPTY = new SomeImpl<void>(undefined);
-
     readonly some!: true;
     readonly none!: false;
     readonly val!: T;
@@ -92,7 +90,7 @@ export class SomeImpl<T> implements BaseOption<T> {
      *  (This is the `unwrap_or` in rust)
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    valueOr(_val: unknown): T {
+    public valueOr(_val: unknown): T {
         return this.val;
     }
 
@@ -102,7 +100,7 @@ export class SomeImpl<T> implements BaseOption<T> {
      *
      * This function can be used to compose the Options of two functions.
      */
-    map<T2>(mapper: (val: T) => T2): Some<T2> {
+    public map<T2>(mapper: (val: T) => T2): Some<T2> {
         return Some(mapper(this.val));
     }
 
@@ -110,7 +108,7 @@ export class SomeImpl<T> implements BaseOption<T> {
      * Calls `mapper` if the Option is `Some`, otherwise returns `None`.
      * This function can be used for control flow based on `Option` values.
      */
-    andThen<T2>(mapper: ((val: T) => Option<T2>) | ((val: T) => T2)): Option<T2> {
+    public andThen<T2>(mapper: ((val: T) => Option<T2>) | ((val: T) => T2)): Option<T2> {
         const result = mapper(this.val);
         if (result instanceof SomeImpl || result instanceof NoneImpl) {
             return result;
@@ -127,17 +125,19 @@ export class SomeImpl<T> implements BaseOption<T> {
      *
      * (this is the `into_Some()` in rust)
      */
-    safeValue(): T {
+    public safeValue(): T {
         return this.val;
     }
 }
 
 // This allows Some to be callable - possible because of the es5 compilation target
-export const Some = <T>(val: T): SomeImpl<T> => new SomeImpl<T>(val);
+export function Some<T>(val: T): SomeImpl<T> {
+    return new SomeImpl<T>(val);
+}
 export type Some<T> = SomeImpl<T>;
 
 export type Option<T> = Some<T> | None;
 
-export function isOption<T = unknown>(value: unknown): value is Option<T> {
-    return value instanceof SomeImpl || value === None;
+export function IsOption<T = unknown>(value: unknown): value is Option<T> {
+    return value instanceof SomeImpl || value === NONE;
 }

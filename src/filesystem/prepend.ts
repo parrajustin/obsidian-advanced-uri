@@ -5,9 +5,7 @@ import { WriteAndOpenFile } from "./write_and_open_file";
 import type { AdvancedURISettings } from "src/types";
 import type { OpenExistingFileAndSetCursorParams } from "./open_existing_file_and_set_cursor";
 import type { StatusError } from "../lib/status_error";
-import { NotFoundError } from "../lib/status_error";
 import type { Result } from "../lib/result";
-import { Err } from "../lib/result";
 
 export interface PrependParams extends OpenExistingFileAndSetCursorParams {
     /** Heading to add text before. */
@@ -29,10 +27,11 @@ export async function Prepend(
     let dataToWrite: string = "";
     if (parameters.heading !== undefined) {
         path = file.path;
-        const line = GetEndAndBeginningOfHeading(app, file, parameters.heading);
-        if (line === undefined) {
-            return Err(NotFoundError(`failed to find headinb block for "${parameters.heading}".`));
+        const lineResult = GetEndAndBeginningOfHeading(app, file, parameters.heading);
+        if (lineResult.err) {
+            return lineResult;
         }
+        const line = lineResult.safeUnwrap();
 
         // Get the file lines.
         const data = await app.vault.read(file);
@@ -46,7 +45,7 @@ export async function Prepend(
         const fileData = await app.vault.read(file);
         const cache = app.metadataCache.getFileCache(file);
         let line = 0;
-        if (parameters.line) {
+        if (parameters.line !== undefined) {
             line += Math.max(Number(parameters.line) - 1, 0);
         } else if (cache !== null && cache.frontmatterPosition) {
             line += cache.frontmatterPosition.end.line + 1;

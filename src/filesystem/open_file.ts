@@ -1,17 +1,19 @@
 import type { App, WorkspaceLeaf } from "obsidian";
 import { MarkdownView, Platform, TFile } from "obsidian";
 import type { OpenMode } from "../types";
-import { getViewStateFromMode } from "../utils";
+import { GetViewStateFromMode } from "../utils";
 import type { StatusError } from "../lib/status_error";
 import { InternalError, InvalidArgumentError } from "../lib/status_error";
 import type { Result } from "../lib/result";
 import { Err, Ok } from "../lib/result";
-import { None, Some, type Option } from "../lib/option";
+import { NONE, Some, type Option } from "../lib/option";
+import { TypeGuard } from "../lib/type_guard";
 
 export interface OpenParams {
     file?: string | TFile;
     setting?: boolean;
     parameters: {
+        viewmode?: string;
         openmode?: OpenMode;
         filepath?: string;
     };
@@ -24,10 +26,10 @@ export async function OpenFile(
     { file, setting, parameters, supportPopover, mode }: OpenParams,
     app: App
 ): Promise<Result<WorkspaceLeaf, StatusError>> {
-    let leaf: Option<WorkspaceLeaf> = None;
+    let leaf: Option<WorkspaceLeaf> = NONE;
     if (parameters.openmode == "popover" && (supportPopover ?? true)) {
         const hoverEditor = app.plugins.plugins["obsidian-hover-editor"];
-        if (!hoverEditor) {
+        if (hoverEditor === undefined) {
             return Err(InternalError("The hover editor internal plugin not found!"));
         }
 
@@ -67,7 +69,12 @@ export async function OpenFile(
             let fileIsAlreadyOpened = false;
             if (isBoolean(openMode)) {
                 app.workspace.iterateAllLeaves((existingLeaf: WorkspaceLeaf) => {
-                    if (existingLeaf.view.file?.path === parameters.filepath) {
+                    const view = existingLeaf.view;
+                    if (
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        TypeGuard<MarkdownView>(view, (view as any).file !== undefined) &&
+                        view.file?.path === parameters.filepath
+                    ) {
                         if (fileIsAlreadyOpened) {
                             return;
                         }
@@ -81,6 +88,7 @@ export async function OpenFile(
                 });
             }
         }
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (leaf.none) {
             leaf = Some(app.workspace.getLeaf(openMode));
             app.workspace.setActiveLeaf(leaf.safeValue(), { focus: true });
@@ -98,7 +106,9 @@ export async function OpenFile(
             file,
             "/",
             false,
-            mode != undefined ? { state: { mode: mode } } : getViewStateFromMode(parameters)
+            mode != undefined
+                ? { state: { mode: mode } }
+                : GetViewStateFromMode({ viewmode: parameters.viewmode })
         );
     }
 
@@ -109,7 +119,7 @@ export async function OpenFile(
         } else {
             viewState.state = {
                 ...viewState.state,
-                ...getViewStateFromMode(parameters)?.state
+                ...GetViewStateFromMode(parameters)?.state
             };
         }
         await leaf.safeValue().setViewState(viewState);

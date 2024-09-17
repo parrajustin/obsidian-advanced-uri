@@ -7,38 +7,39 @@ export class ReplaceModal extends SuggestModal<string> {
     emptyText = "Empty text (replace with nothing)";
     constructor(
         plugin: AdvancedURI,
-        private search: SearchModalData,
-        private filepath: string
+        private _search: SearchModalData,
+        private _filepath: string
     ) {
         super(plugin.app);
         this.plugin = plugin;
         this.setPlaceholder("Replacement text");
     }
 
-    getSuggestions(query: string): string[] {
+    public getSuggestions(query: string): string[] {
         if (query === "") {
             query = this.emptyText;
         }
         return [query];
     }
 
-    renderSuggestion(value: string, el: HTMLElement): void {
+    public renderSuggestion(value: string, el: HTMLElement): void {
         el.innerText = value;
     }
 
-    onChooseSuggestion(item: string, _: MouseEvent | KeyboardEvent): void {
-        if (this.search.isRegEx) {
-            this.plugin.tools.copyURI({
-                filepath: this.filepath,
-                searchregex: this.search.source,
-                replace: item == this.emptyText ? "" : item
-            });
-        } else {
-            this.plugin.tools.copyURI({
-                filepath: this.filepath,
-                search: this.search.source,
-                replace: item == this.emptyText ? "" : item
+    public async onChooseSuggestion(item: string, _: MouseEvent | KeyboardEvent): Promise<void> {
+        if (this._search.isRegEx) {
+            await this.plugin.tools.copyURI({
+                filepath: this._filepath,
+                searchregex: this._search.source,
+                replace: item == this.emptyText ? "" : item,
+                uid: ""
             });
         }
+        await this.plugin.tools.copyURI({
+            filepath: this._filepath,
+            search: this._search.source,
+            replace: item == this.emptyText ? "" : item,
+            uid: ""
+        });
     }
 }

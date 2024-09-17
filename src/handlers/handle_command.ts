@@ -4,6 +4,7 @@ import { OpenFileHandler } from "./handler_utils";
 import type { StatusResult } from "../lib/result";
 import { Ok } from "../lib/result";
 import type { StatusError } from "../lib/status_error";
+import type { Command } from "obsidian";
 
 /** URI params for command execution. */
 export interface CommandUriParams extends OpenFileParams {
@@ -28,23 +29,24 @@ export async function HandleCommand(
     }
 
     // Params for command execution.
-    if (parameters.commandid) {
-        this.app.commands.executeCommandById(parameters.commandid);
-    } else if (parameters.commandname) {
-        const rawCommands = this.app.commands.commands;
+    if (parameters.commandid != undefined) {
+        pluginClass.app.commands.executeCommandById(parameters.commandid);
+    } else if (parameters.commandname !== undefined) {
+        const rawCommands = pluginClass.app.commands.commands;
         for (const command in rawCommands) {
-            if (rawCommands[command].name === parameters.commandname) {
-                if (rawCommands[command].callback) {
-                    await rawCommands[command].callback();
-                } else {
-                    rawCommands[command].checkCallback(false);
+            const selectedCommand = rawCommands[command] as Command;
+            if (selectedCommand.name === parameters.commandname) {
+                if (selectedCommand.callback) {
+                    await selectedCommand.callback();
+                } else if (selectedCommand.checkCallback !== undefined) {
+                    selectedCommand.checkCallback(false);
                 }
                 break;
             }
         }
     }
 
-    if (parameters.confirm && parameters.confirm != "false") {
+    if (parameters.confirm !== undefined && parameters.confirm != "false") {
         await new Promise((r) => setTimeout(r, 750));
         const button = document.querySelector(
             ".mod-cta:not([style*='display: none'])"

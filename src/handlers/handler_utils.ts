@@ -2,7 +2,7 @@ import { MarkdownView, TFile } from "obsidian";
 import type { SetCursorInLineParams } from "../filesystem";
 import { OpenFile, SetCursorInLine } from "../filesystem";
 import type AdvancedURI from "../main";
-import { getAlternativeFilePath } from "../utils";
+import { GetAlternativeFilePath } from "../utils";
 import { Ok, type StatusResult } from "../lib/result";
 import type { StatusError } from "../lib/status_error";
 import type { OpenMode } from "../types";
@@ -26,7 +26,7 @@ export async function OpenFileHandler(
     pluginClass: AdvancedURI
 ): Promise<StatusResult<StatusError>> {
     // Params to open the file.
-    if (parameters.filepath) {
+    if (parameters.filepath !== undefined) {
         if (parameters.mode) {
             if (parameters.mode == "new") {
                 // TODO: find out what this mode does...
@@ -35,7 +35,7 @@ export async function OpenFileHandler(
                     "/"
                 );
                 if (file instanceof TFile) {
-                    parameters.filepath = getAlternativeFilePath(pluginClass.app, file);
+                    parameters.filepath = GetAlternativeFilePath(pluginClass.app, file);
                 }
             }
 
@@ -91,7 +91,7 @@ export async function OpenFileHandler(
                 return openFileResult;
             }
 
-            return await SetCursorInLine(parameters, pluginClass.app);
+            return SetCursorInLine(parameters, pluginClass.app);
         } else {
             const openFileResult = await OpenFile(
                 {

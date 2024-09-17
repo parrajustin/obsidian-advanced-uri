@@ -37,7 +37,7 @@ export async function WriteAndOpenFile(
         }
     }
     // Open the file and set the cursor.
-    OpenExistingFileAndSetCursor(outputFileName, parameters, app, settings);
+    await OpenExistingFileAndSetCursor(outputFileName, parameters, app, settings);
 
     // Return instance of TFile.
     return Ok(app.vault.getAbstractFileByPath(outputFileName) as TFile);

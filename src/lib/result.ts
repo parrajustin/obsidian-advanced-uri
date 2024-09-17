@@ -49,7 +49,7 @@ interface BaseResult<T, E> {
  */
 export class ErrImpl<E> implements BaseResult<never, E> {
     /** An empty Err */
-    static readonly EMPTY = new ErrImpl<void>(undefined);
+    static readonly empty = new ErrImpl<void>(undefined);
 
     readonly ok!: false;
     readonly err!: true;
@@ -70,7 +70,7 @@ export class ErrImpl<E> implements BaseResult<never, E> {
      *
      *  (This is the `unwrap_or` in rust)
      */
-    unwrapOr<T2>(val: T2): T2 {
+    public unwrapOr<T2>(val: T2): T2 {
         return val;
     }
 
@@ -81,7 +81,8 @@ export class ErrImpl<E> implements BaseResult<never, E> {
      *
      * Throws if the value is an `Err`, with a message provided by the `Err`'s value.
      */
-    unsafeUnwrap(): never {
+    public unsafeUnwrap(): never {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         throw new Error(`Error UnsafeUnwrap "${this.val}"`);
     }
 
@@ -91,7 +92,7 @@ export class ErrImpl<E> implements BaseResult<never, E> {
      *
      * This function can be used to compose the results of two functions.
      */
-    map(): Err<E> {
+    public map(): Err<E> {
         return this;
     }
 
@@ -99,7 +100,7 @@ export class ErrImpl<E> implements BaseResult<never, E> {
      * Calls `mapper` if the result is `Ok`, otherwise returns the `Err` value of self.
      * This function can be used for control flow based on `Result` values.
      */
-    andThen(): Err<E> {
+    public andThen(): Err<E> {
         return this;
     }
 
@@ -109,20 +110,22 @@ export class ErrImpl<E> implements BaseResult<never, E> {
      *
      * This function can be used to pass through a successful result while handling an error.
      */
-    mapErr<E2>(mapper: (err: E) => E2): Err<E2> {
+    public mapErr<E2>(mapper: (err: E) => E2): Err<E2> {
         return Err(mapper(this.val));
     }
 }
 
 // This allows Err to be callable - possible because of the es5 compilation target
-export const Err = <T>(val: T): ErrImpl<T> => new ErrImpl<T>(val);
+export function Err<T>(val: T): ErrImpl<T> {
+    return new ErrImpl<T>(val);
+}
 export type Err<E> = ErrImpl<E>;
 
 /**
  * Contains the success value
  */
 export class OkImpl<T> implements BaseResult<T, never> {
-    static readonly EMPTY = new OkImpl<void>(undefined);
+    static readonly empty = new OkImpl<undefined>(undefined);
 
     readonly ok!: true;
     readonly err!: false;
@@ -143,7 +146,7 @@ export class OkImpl<T> implements BaseResult<T, never> {
      *
      *  (This is the `unwrap_or` in rust)
      */
-    unwrapOr(): T {
+    public unwrapOr(): T {
         return this.val;
     }
 
@@ -154,7 +157,7 @@ export class OkImpl<T> implements BaseResult<T, never> {
      *
      * Throws if the value is an `Err`, with a message provided by the `Err`'s value.
      */
-    unsafeUnwrap(): T {
+    public unsafeUnwrap(): T {
         return this.val;
     }
 
@@ -164,7 +167,7 @@ export class OkImpl<T> implements BaseResult<T, never> {
      *
      * This function can be used to compose the results of two functions.
      */
-    map<T2>(mapper: (val: T) => T2): Ok<T2> {
+    public map<T2>(mapper: (val: T) => T2): Ok<T2> {
         return Ok(mapper(this.val));
     }
 
@@ -172,10 +175,10 @@ export class OkImpl<T> implements BaseResult<T, never> {
      * Calls `mapper` if the result is `Ok`, otherwise returns the `Err` value of self.
      * This function can be used for control flow based on `Result` values.
      */
-    andThen<T2>(mapper: (val: T) => Ok<T2>): Ok<T2>;
-    andThen<E2>(mapper: (val: T) => Err<E2>): Result<T, E2>;
-    andThen<T2, E2>(mapper: (val: T) => Result<T2, E2>): Result<T2, E2>;
-    andThen<T2, E2>(mapper: (val: T) => Result<T2, E2>): Result<T2, E2> {
+    public andThen<T2>(mapper: (val: T) => Ok<T2>): Ok<T2>;
+    public andThen<E2>(mapper: (val: T) => Err<E2>): Result<T, E2>;
+    public andThen<T2, E2>(mapper: (val: T) => Result<T2, E2>): Result<T2, E2>;
+    public andThen<T2, E2>(mapper: (val: T) => Result<T2, E2>): Result<T2, E2> {
         return mapper(this.val);
     }
 
@@ -185,7 +188,7 @@ export class OkImpl<T> implements BaseResult<T, never> {
      *
      * This function can be used to pass through a successful result while handling an error.
      */
-    mapErr(): Ok<T> {
+    public mapErr(): Ok<T> {
         return this;
     }
 
@@ -198,21 +201,23 @@ export class OkImpl<T> implements BaseResult<T, never> {
      *
      * (this is the `into_ok()` in rust)
      */
-    safeUnwrap(): T {
+    public safeUnwrap(): T {
         return this.val;
     }
 }
 
 // This allows Ok to be callable - possible because of the es5 compilation target
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const Ok = <T>(val: T = undefined as any): OkImpl<T> => new OkImpl<T>(val);
+export function Ok<T>(val: T = undefined as any): OkImpl<T> {
+    return new OkImpl<T>(val);
+}
 export type Ok<T> = OkImpl<T>;
 
 export type Result<T, E> = Ok<T> | Err<E>;
 /** A special type of result where we don't care about the ok result but just that it is ok or err. */
 export type StatusResult<E> = Result<unknown, E>;
 
-export function isResult<T, E>(val: unknown): val is Result<T, E> {
+export function IsResult<T, E>(val: unknown): val is Result<T, E> {
     return val instanceof ErrImpl || val instanceof OkImpl;
 }
 
@@ -222,16 +227,16 @@ export function isResult<T, E>(val: unknown): val is Result<T, E> {
  * @returns true if val is Ok.
  */
 // deno-lint-ignore no-explicit-any
-export function isOk<T>(val: unknown): val is Ok<T> {
-    return isResult(val) && val.ok;
+export function IsOk<T>(val: unknown): val is Ok<T> {
+    return IsResult(val) && val.ok;
 }
 
 // deno-lint-ignore no-explicit-any
-export function isErr(val: unknown): val is Err<unknown> {
-    return isResult(val) && val.err;
+export function IsErr(val: unknown): val is Err<unknown> {
+    return IsResult(val) && val.err;
 }
 
 // deno-lint-ignore no-explicit-any
-export function isErrWithError<E>(val: unknown, error: E): val is ErrImpl<E> {
-    return isResult(val) && val.err && val.val === error;
+export function IsErrWithError<E>(val: unknown, error: E): val is ErrImpl<E> {
+    return IsResult(val) && val.err && val.val === error;
 }

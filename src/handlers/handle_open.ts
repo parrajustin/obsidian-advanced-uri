@@ -112,7 +112,7 @@ export async function HandleOpen(
     if (parameters.mode != undefined) {
         await SetCursor(parameters, pluginClass.app);
     }
-    if (parameters.writeUid) {
+    if (parameters.writeUid != undefined) {
         const view = pluginClass.app.workspace.getActiveViewOfType<MarkdownView>(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             MarkdownView as any
@@ -125,7 +125,7 @@ export async function HandleOpen(
             return Err(InternalError("No file in active view found."));
         }
 
-        pluginClass.tools.writeUIDIfNone(file, parameters.uid);
+        await pluginClass.tools.writeUIDIfNone(file, parameters.uid);
     }
     return Ok();
 }

@@ -11,7 +11,7 @@ export class SearchModal extends SuggestModal<SearchModalData> {
         this.setPlaceholder("Searched text. RegEx is supported");
     }
 
-    getSuggestions(query: string): SearchModalData[] {
+    public getSuggestions(query: string): SearchModalData[] {
         if (query === "") {
             query = "...";
         }
@@ -35,9 +35,9 @@ export class SearchModal extends SuggestModal<SearchModalData> {
         ];
     }
 
-    renderSuggestion(value: SearchModalData, el: HTMLElement): void {
+    public renderSuggestion(value: SearchModalData, el: HTMLElement): void {
         el.innerText = value.display;
     }
 
-    onChooseSuggestion(_Data: SearchModalData, _Mouse: MouseEvent | KeyboardEvent): void {}
+    public onChooseSuggestion(_data: SearchModalData, _mouse: MouseEvent | KeyboardEvent): void {}
 }

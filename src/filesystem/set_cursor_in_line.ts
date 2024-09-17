@@ -31,11 +31,12 @@ export async function SetCursorInLine(
     const viewState = view.leaf.getViewState();
 
     const rawLine = parameters.line != undefined ? Number(parameters.line) : undefined;
-    const rawColumn = parameters.column ? Number(parameters.column) : 1;
+    const rawColumn = parameters.column != undefined ? Number(parameters.column) : 1;
     viewState.state.mode = "source";
     await view.leaf.setViewState(viewState);
 
-    let line: number, column: number;
+    let line: number;
+    let column: number;
     if (parameters.offset != undefined) {
         const pos = view.editor.offsetToPos(Number(parameters.offset));
         line = pos.line;

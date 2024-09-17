@@ -1,9 +1,9 @@
-import type { CachedMetadata } from "obsidian";
+import type { App, CachedMetadata } from "obsidian";
 import { Notice, parseFrontMatterEntry, TFile } from "obsidian";
 import { v4 as uuidv4 } from "uuid";
 import type AdvancedURI from "./main";
 import type { Parameters } from "./types";
-import { copyText } from "./utils";
+import { CopyText } from "./utils";
 import { URI_LINK } from "./constants";
 import type { Result } from "./lib/result";
 import { Err, Ok } from "./lib/result";
@@ -15,33 +15,34 @@ import { NotFoundError } from "./lib/status_error";
  * are independent of the plugins settings.
  */
 export default class Tools {
-    constructor(private readonly plugin: AdvancedURI) {}
+    private _app: App;
+    constructor(private readonly _plugin: AdvancedURI) {
+        this._app = this._plugin.app;
+    }
 
-    private app = this.plugin.app;
-
-    get settings() {
-        return this.plugin.settings;
+    public get settings() {
+        return this._plugin.settings;
     }
 
     /** Writes the UID if there is none, can also specifiy the uid to write. */
     public async writeUIDIfNone(file: TFile, userSuppliedUid?: string): Promise<void> {
         //await parsing of frontmatter
         const cache =
-            this.app.metadataCache.getFileCache(file) ??
+            this._app.metadataCache.getFileCache(file) ??
             (await new Promise<CachedMetadata>((resolve) => {
-                const ref = this.app.metadataCache.on("changed", (metaFile) => {
+                const ref = this._app.metadataCache.on("changed", (metaFile) => {
                     if (metaFile.path == file.path) {
-                        const cache = this.app.metadataCache.getFileCache(file);
-                        if (cache === null) {
+                        const tempCache = this._app.metadataCache.getFileCache(file);
+                        if (tempCache === null) {
                             return;
                         }
-                        this.app.metadataCache.offref(ref);
-                        resolve(cache);
+                        this._app.metadataCache.offref(ref);
+                        resolve(tempCache);
                     }
                 });
             }));
 
-        const uid = parseFrontMatterEntry(cache.frontmatter, this.plugin.settings.idField);
+        const uid = parseFrontMatterEntry(cache.frontmatter, this._plugin.settings.idField);
         if (uid !== undefined) {
             return;
         }
@@ -50,12 +51,12 @@ export default class Tools {
 
     /** Writes the specified UID to the file, can result in multiple uid for a file. */
     public async writeUIDToFile(file: TFile, uid: string): Promise<string> {
-        const frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
-        const fileContent: string = await this.app.vault.read(file);
+        const frontmatter = this._app.metadataCache.getFileCache(file)?.frontmatter;
+        const fileContent: string = await this._app.vault.read(file);
         const isYamlEmpty: boolean =
             (!frontmatter || frontmatter.length === 0) && !fileContent.match(/^-{3}\s*\n*\r*-{3}/);
         const splitContent = fileContent.split("\n");
-        const key = `${this.plugin.settings.idField}:`;
+        const key = `${this._plugin.settings.idField}:`;
         if (isYamlEmpty) {
             splitContent.unshift("---");
             splitContent.unshift(`${key} ${uid}`);
@@ -70,54 +71,52 @@ export default class Tools {
         }
 
         const newFileContent = splitContent.join("\n");
-        await this.app.vault.modify(file, newFileContent);
+        await this._app.vault.modify(file, newFileContent);
         return uid;
     }
 
     /** Gets the UID from a file or the first if multiple. */
-    async getUIDFromFile(file: TFile): Promise<string> {
+    public async getUIDFromFile(file: TFile): Promise<string> {
         //await parsing of frontmatter
         const cache =
-            this.app.metadataCache.getFileCache(file) ??
+            this._app.metadataCache.getFileCache(file) ??
             (await new Promise<CachedMetadata>((resolve) => {
-                const ref = this.app.metadataCache.on("changed", (metaFile) => {
+                const ref = this._app.metadataCache.on("changed", (metaFile) => {
                     if (metaFile.path == file.path) {
-                        const cache = this.app.metadataCache.getFileCache(file);
-                        if (cache === null) {
+                        const tempCache = this._app.metadataCache.getFileCache(file);
+                        if (tempCache === null) {
                             return;
                         }
-                        this.app.metadataCache.offref(ref);
-                        resolve(cache);
+                        this._app.metadataCache.offref(ref);
+                        resolve(tempCache);
                     }
                 });
             }));
 
-        const uid = parseFrontMatterEntry(cache.frontmatter, this.plugin.settings.idField);
+        const uid = parseFrontMatterEntry(cache.frontmatter, this._plugin.settings.idField);
         if (uid != undefined) {
             if (uid instanceof Array) {
                 return uid[0];
-            } else {
-                return uid;
             }
+            return uid;
         }
-        return await this.writeUIDToFile(file, uuidv4());
+        return this.writeUIDToFile(file, uuidv4());
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async generateURI(parameters: {
+    public async generateURI(parameters: {
+        [key: string]: string | number | boolean | null;
         filepath: string;
         uid: string;
-        [key: string]: string | number | boolean;
     }) {
         const prefix = `obsidian://${URI_LINK}`;
         let suffix = "";
-        const file = this.app.vault.getAbstractFileByPath(parameters.filepath);
+        const file = this._app.vault.getAbstractFileByPath(parameters.filepath);
         if (this.settings.includeVaultName) {
             suffix += "?vault=";
-            if (this.settings.vaultParam == "id" && this.app.appId) {
-                suffix += encodeURIComponent(this.app.appId);
+            if (this.settings.vaultParam == "id" && this._app.appId) {
+                suffix += encodeURIComponent(this._app.appId);
             } else {
-                suffix += encodeURIComponent(this.app.vault.getName());
+                suffix += encodeURIComponent(this._app.vault.getName());
             }
         }
         if (this.settings.useUID && file instanceof TFile && file.extension == "md") {
@@ -137,7 +136,7 @@ export default class Tools {
                 return 0;
             });
         for (const parameter of sortedParameterKeys) {
-            if (parameters[parameter] != undefined) {
+            if (parameters[parameter] != undefined && parameters[parameter] !== null) {
                 suffix += suffix ? "&" : "?";
                 suffix += `${parameter}=${encodeURIComponent(parameters[parameter])}`;
             }
@@ -148,24 +147,23 @@ export default class Tools {
         return prefix + suffix;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async copyURI(parameters: {
+    public async copyURI(parameters: {
+        [key: string]: string | number | boolean | null;
         filepath: string;
         uid: string;
-        [key: string]: string | number | boolean;
     }) {
         const uri = await this.generateURI(parameters);
-        await copyText(uri);
+        await CopyText(uri);
 
         new Notice("Advanced URI copied to your clipboard");
     }
 
-    getFileFromUID(uid: string): TFile | undefined {
-        const files = this.app.vault.getMarkdownFiles();
+    public getFileFromUID(uid: string): TFile | undefined {
+        const files = this._app.vault.getMarkdownFiles();
         const idKey = this.settings.idField;
         for (const file of files) {
             const fieldValue = parseFrontMatterEntry(
-                this.app.metadataCache.getFileCache(file)?.frontmatter,
+                this._app.metadataCache.getFileCache(file)?.frontmatter,
                 idKey
             );
 
@@ -175,15 +173,16 @@ export default class Tools {
                 if (fieldValue == uid) return file;
             }
         }
+        return undefined;
     }
 
     /** Gets the file with the given block id. */
     public getFileFromBlockID(blockId: string): Result<TFile, StatusError> {
-        const files = this.app.vault.getMarkdownFiles();
+        const files = this._app.vault.getMarkdownFiles();
 
         for (const file of files) {
             const blockExists =
-                this.app.metadataCache.getFileCache(file)?.blocks?.[blockId] != undefined;
+                this._app.metadataCache.getFileCache(file)?.blocks?.[blockId] != undefined;
             if (blockExists) {
                 return Ok(file);
             }

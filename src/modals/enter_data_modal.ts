@@ -1,6 +1,6 @@
 import { SuggestModal } from "obsidian";
 import type AdvancedURI from "../main";
-import type { EnterData, Parameters } from "../types";
+import type { EnterData } from "../types";
 
 /** A modal to suggest the following write modes into a file. */
 export class EnterDataModal extends SuggestModal<EnterData> {
@@ -10,7 +10,7 @@ export class EnterDataModal extends SuggestModal<EnterData> {
 
     constructor(
         plugin: AdvancedURI,
-        private file: string
+        private _file: string
     ) {
         super(plugin.app);
         this.plugin = plugin;
@@ -20,7 +20,7 @@ export class EnterDataModal extends SuggestModal<EnterData> {
     }
 
     /** Ran everytime text is written into the suggestion view. */
-    getSuggestions(query: string): EnterData[] {
+    public getSuggestions(query: string): EnterData[] {
         const suggestions: EnterData[] = [];
         for (const mode of this.modes) {
             if (mode === "overwrite" && query === "") {
@@ -30,13 +30,13 @@ export class EnterDataModal extends SuggestModal<EnterData> {
             /** Text to display in the suggestion view. */
             let display: string;
             if (query === "") {
-                if (mode) {
+                if (mode !== null && mode.length > 0) {
                     display = `Write "${query}" in ${mode} mode`;
                 } else {
                     display = `Write "${query}"`;
                 }
             } else {
-                if (mode) {
+                if (mode !== null && mode.length > 0) {
                     display = `Open in ${mode} mode`;
                 } else {
                     display = `Open`;
@@ -48,17 +48,20 @@ export class EnterDataModal extends SuggestModal<EnterData> {
                 display: display,
                 mode: mode,
                 func: () => {
-                    if (this.file) {
-                        this.plugin.tools.copyURI({
-                            filepath: this.file,
+                    if (this._file) {
+                        void this.plugin.tools.copyURI({
+                            filepath: this._file,
                             data: query,
-                            mode: mode as Parameters["mode"]
+                            mode: mode,
+                            uid: ""
                         });
                     } else {
-                        this.plugin.tools.copyURI({
+                        void this.plugin.tools.copyURI({
                             daily: "true",
                             data: query,
-                            mode: mode as Parameters["mode"]
+                            mode: mode,
+                            uid: "",
+                            filepath: ""
                         });
                     }
                 }
@@ -69,12 +72,12 @@ export class EnterDataModal extends SuggestModal<EnterData> {
     }
 
     /** What to render for a suggested item. */
-    renderSuggestion(value: EnterData, el: HTMLElement): void {
+    public renderSuggestion(value: EnterData, el: HTMLElement): void {
         el.innerText = value.display;
     }
 
     /** What to do on suggestion chosen. */
-    onChooseSuggestion(item: EnterData): void {
+    public onChooseSuggestion(item: EnterData): void {
         item.func();
     }
 }

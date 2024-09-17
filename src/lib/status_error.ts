@@ -38,8 +38,8 @@ export enum ErrorCode {
 
 /** An error holder. */
 export class StatusError {
-    private readonly stack_!: string;
-    private readonly additionalData = new Map<string, string>();
+    private readonly _stack!: string;
+    private readonly _additionalData = new Map<string, string>();
 
     constructor(
         /* The status error code. */
@@ -48,23 +48,24 @@ export class StatusError {
         public message: string
     ) {
         const stackLines = new Error().stack!.split("\n").slice(2);
-        if (stackLines && stackLines.length > 0 && stackLines[0]?.includes("StatusError")) {
+        const firstStackLine = stackLines.length >= 1 ? (stackLines[0] as string) : "";
+        if (stackLines.length > 0 && firstStackLine.includes("StatusError")) {
             stackLines.shift();
         }
 
-        this.stack_ = stackLines.join("\n");
+        this._stack = stackLines.join("\n");
     }
 
     public setPayload(name: string, payload: string) {
-        this.additionalData.set(name, payload);
+        this._additionalData.set(name, payload);
     }
 
     public toString(): string {
         const data: string[] = [];
-        for (const entry of this.additionalData.entries()) {
+        for (const entry of this._additionalData.entries()) {
             data.push(`${entry[0]}: ${entry[1]}`);
         }
-        return `[${new Date().toISOString()}] ${ErrorCode[this.errorCode]}: ${this.message} at stack:\n${this.stack_}${data.length > 0 ? `\n\n[Additional Data:]\n ${data.join("\n")}` : ""}`;
+        return `[${new Date().toISOString()}] ${ErrorCode[this.errorCode]}: ${this.message} at stack:\n${this._stack}${data.length > 0 ? `\n\n[Additional Data:]\n ${data.join("\n")}` : ""}`;
     }
 
     public with(func: (error: StatusError) => void): StatusError {

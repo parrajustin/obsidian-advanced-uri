@@ -4,7 +4,7 @@ import type AdvancedURI from "../main";
 
 export class CommandModal extends FuzzySuggestModal<Command> {
     plugin: AdvancedURI;
-    file: string;
+    file?: string;
     constructor(plugin: AdvancedURI, file?: string) {
         super(plugin.app);
         this.plugin = plugin;
@@ -12,24 +12,29 @@ export class CommandModal extends FuzzySuggestModal<Command> {
     }
 
     /** Gets all possibly suggested items. */
-    getItems(): Command[] {
+    public getItems(): Command[] {
         const rawCommands = this.app.commands.commands;
         const commands: Command[] = Object.keys(rawCommands).map((e) => {
-            return { id: rawCommands[e].id, name: rawCommands[e].name };
+            const command = rawCommands[e] as Command;
+            return { id: command.id, name: command.name };
         });
         return commands;
     }
 
     /** Gets for a suggestion item what is the text to represent it. */
-    getItemText(item: Command): string {
+    public getItemText(item: Command): string {
         return item.name;
     }
 
     /** On choosing an item copies the URI to clipboard. */
-    onChooseItem(item: Command, _: MouseEvent | KeyboardEvent): void {
-        this.plugin.tools.copyURI({
+    public async onChooseItem(item: Command, _: MouseEvent | KeyboardEvent): Promise<void> {
+        if (this.file === undefined) {
+            return;
+        }
+        await this.plugin.tools.copyURI({
             filepath: this.file,
-            commandid: item.id
+            commandid: item.id,
+            uid: ""
         });
     }
 }

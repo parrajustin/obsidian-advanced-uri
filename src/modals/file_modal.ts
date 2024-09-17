@@ -7,17 +7,17 @@ export class FileModal extends FuzzySuggestModal<FileModalData> {
     plugin: AdvancedURI;
     constructor(
         plugin: AdvancedURI,
-        private placeHolder: string,
-        private allowNoFile: boolean = true
+        private _placeHolder: string,
+        private _allowNoFile: boolean = true
     ) {
         super(plugin.app);
         this.plugin = plugin;
-        this.setPlaceholder(this.placeHolder);
+        this.setPlaceholder(this._placeHolder);
     }
 
-    getItems(): FileModalData[] {
+    public getItems(): FileModalData[] {
         const specialItems: FileModalData[] = [];
-        if (this.allowNoFile) {
+        if (this._allowNoFile) {
             specialItems.push({
                 display: "<Don't specify a file>",
                 source: undefined
@@ -35,9 +35,9 @@ export class FileModal extends FuzzySuggestModal<FileModalData> {
         ];
     }
 
-    getItemText(item: FileModalData): string {
+    public getItemText(item: FileModalData): string {
         return item.display;
     }
 
-    onChooseItem(_: FileModalData): void {}
+    public onChooseItem(_: FileModalData): void {}
 }

@@ -2,7 +2,7 @@ import type { StatusError } from "src/lib/status_error";
 import { InternalError, InvalidArgumentError, NotFoundError } from "src/lib/status_error";
 import type AdvancedURI from "src/main";
 import { OpenFile } from "../filesystem";
-import { getAlternativeFilePath } from "../utils";
+import { GetAlternativeFilePath } from "../utils";
 import type { OpenMode } from "../types";
 import { MarkdownView } from "obsidian";
 import type { StatusResult } from "../lib/result";
@@ -33,7 +33,7 @@ export async function HandleOpenBlock(
     const openFileResult = await OpenFile(
         {
             file:
-                getAlternativeFilePath(pluginClass.app, file.safeUnwrap()) +
+                GetAlternativeFilePath(pluginClass.app, file.safeUnwrap()) +
                 "#^" +
                 parameters.block,
             setting: pluginClass.settings.openFileWithoutWriteInNewPane,

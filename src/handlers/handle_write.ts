@@ -51,7 +51,7 @@ export async function HandleWrite(
         if (outFile.err) {
             return outFile;
         }
-        if (parameters.writeUid) {
+        if (parameters.writeUid !== undefined && parameters.writeUid) {
             await pluginClass.tools.writeUIDIfNone(outFile.safeUnwrap(), parameters.uid);
         }
         return Ok();
@@ -90,10 +90,12 @@ export async function HandleWrite(
             outFile = prependResult.safeUnwrap();
             break;
         }
+        case undefined:
+            break;
     }
 
     // Write uid if necessary.
-    if (parameters.writeUid && outFile !== undefined) {
+    if (parameters.writeUid != undefined && parameters.writeUid && outFile !== undefined) {
         await pluginClass.tools.writeUIDIfNone(outFile, parameters.uid);
     }
     return Ok();

@@ -12,7 +12,7 @@ export interface PluginUriParams {
 
 /** Handler to modify plugin states. */
 export function HandlePluginManagement(parameters: PluginUriParams, pluginClass: AdvancedURI) {
-    if (parameters.enablePlugins) {
+    if (parameters.enablePlugins !== undefined) {
         const pluginIds = parameters.enablePlugins.split(",");
 
         const enablePluginFunc = (pluginId: string) => {
@@ -28,7 +28,7 @@ export function HandlePluginManagement(parameters: PluginUriParams, pluginClass:
             enablePluginFunc(pluginId);
         }
     }
-    if (parameters.disablePlugins) {
+    if (parameters.disablePlugins != undefined) {
         const pluginIds = parameters.disablePlugins.split(",");
 
         const disablePluginFunc = (pluginId: string) => {

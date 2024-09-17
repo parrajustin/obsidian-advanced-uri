@@ -4,8 +4,8 @@ import { InternalError, NotFoundError } from "./lib/status_error";
 import type { Result } from "./lib/result";
 import { Err, Ok } from "./lib/result";
 
-export function getViewStateFromMode(parameters: { viewmode: string }): OpenViewState | undefined {
-    return parameters.viewmode
+export function GetViewStateFromMode(parameters: { viewmode?: string }): OpenViewState | undefined {
+    return parameters.viewmode !== undefined
         ? {
               state: {
                   mode: parameters.viewmode,
@@ -15,11 +15,12 @@ export function getViewStateFromMode(parameters: { viewmode: string }): OpenView
         : undefined;
 }
 
-export function copyText(text: string) {
+/** Sets the clipboard to `text`. */
+export function CopyText(text: string) {
     return navigator.clipboard.writeText(text);
 }
 
-export function getAlternativeFilePath(app: App, file: TFile): string {
+export function GetAlternativeFilePath(app: App, file: TFile): string {
     const dir = file.parent?.path;
     const formattedDir = dir === "/" ? "" : dir;
     const name = file.name;
@@ -35,7 +36,7 @@ export function getAlternativeFilePath(app: App, file: TFile): string {
     return file.path;
 }
 
-export function getFileUri(app: App, file: TFile): string {
+export function GetFileUri(app: App, file: TFile): string {
     const url = new URL(app.vault.getResourcePath(file));
     url.host = "localhosthostlocal";
     url.protocol = "file";
@@ -78,7 +79,7 @@ export function GetEndAndBeginningOfHeading(
     );
     const restSections = sections.slice(foundSectionIndex + 1);
 
-    const nextHeadingIndex = restSections?.findIndex((e) => e.type === "heading");
+    const nextHeadingIndex = restSections.findIndex((e) => e.type === "heading");
 
     const lastSection =
         restSections[(nextHeadingIndex !== -1 ? nextHeadingIndex : restSections.length) - 1] ??
@@ -107,5 +108,6 @@ export function StripMD(noteName: string): string {
             .split(/\.MD$|\.md$/m)
             .slice(0, -1)
             .join(".md");
-    } else return noteName;
+    }
+    return noteName;
 }
