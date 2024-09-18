@@ -122,7 +122,7 @@ export class SettingsTab extends PluginSettingTab {
             setOfForeignTypes.add(handler.data.type);
 
             new Setting(containerEl)
-                .setName(`Allow "registered" foreign handler "${handler.data.type}".`)
+                .setName(`Allow registered foreign handler "${handler.data.type}".`)
                 .setDesc(handler.data.desc)
                 .addToggle((cb) =>
                     cb
@@ -150,7 +150,7 @@ export class SettingsTab extends PluginSettingTab {
             setOfForeignTypes.add(type);
 
             new Setting(containerEl)
-                .setName(`Allow "unregistered" foreign handler "${type}".`)
+                .setName(`Allow unregistered foreign handler "${type}".`)
                 .setDesc("waiting to be registered.")
                 .addToggle((cb) =>
                     cb.setValue(true).onChange(async (value) => {
